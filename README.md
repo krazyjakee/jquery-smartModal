@@ -1,7 +1,7 @@
 jQuery smartModal
 =================
 
-A *'smart'* jQuery modal plugin that's highly configurable, easy-to-use &amp; implement. Includes multiple implementation options like timed, automatic, sticky modals and more!
+A simple, lightweight jQuery modal plugin that's highly configurable, easy-to-use &amp; implement. Includes multiple implementation options like timed, automatic, sticky modals and more!
 
 ## Installation
 
@@ -36,14 +36,37 @@ Now when a user clicks on an element with the `triggerID` class, the modal will 
 
 The *jQuery smartModal* allows for additional configuration options to allow for more flexibility and control over the models.
 
-### Class Attribute Options
+### Modal Class Attribute Options
 
 | Class | Description |
 | --- | --- |
 | `once` | Will only show the modal once per page load. [jquery.cookie](https://github.com/carhartl/jquery-cookie) will need to be loaded to enable modals to be shown once per visit. |
+| `auto` | Enables the modal to popup automatically when the page is loaded. You can specify the `data-wait` attribute to set the number of seconds before the modal pops up. |
+| `sticky` | Disables the ability to close the modal. |
 
 ### Modal Attribute Options
 
 | Attribute | Description |
 | --- | --- |
 | `data-expires` | *Integer.* Specify the number of days until the cookie expires. |
+| `data-time` | *Integer.* Specify the number of seconds the modal should be visible. |
+| `data-wait` | *Integer.* Specify the number of seconds before the modal should popup. Should be used with the `auto` class. |
+
+### Additional Options
+
+#### Show number of seconds remaining
+
+You can display the number of remaining seconds until the modal disappears within the modal by applying the `sec` class to an element:
+
+```html
+<div class="smartmodal" data-time="10">I'm a timed modal <span class="sec"></span> seconds before I close!</div>
+```
+
+## Development
+
+* Source hosted at [GitHub](https://github.com/bmarshall511/jquery-smartModal)
+* Report issues, questions, feature requests on [GitHub Issues](https://github.com/bmarshall511/jquery-smartModal/issues)
+
+## Authors
+
+[Ben Marshall](http://www.benmarshall.me)
