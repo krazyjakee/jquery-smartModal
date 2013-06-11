@@ -1,4 +1,4 @@
-jQuery smartModal
+jQuery.smartModal
 =================
 
 A simple, lightweight jQuery modal plugin that's highly configurable, easy-to-use &amp; implement. Includes multiple implementation options like timed, automatic, sticky modals and more!
@@ -27,14 +27,62 @@ To get started, create your modal box by adding the class, `smartmodal` to it. Y
 
 ```html
 <div class="smartmodal" id="triggerID">I'm a normal modal!</div>
-<a href="#" class="triggerID">Click me</a> to trigger a normal modal.<br>
+<a href="#" class="triggerID">Click me</a> to trigger a normal modal.
 ```
 
 Now when a user clicks on an element with the `triggerID` class, the modal will popup.
 
+### Examples
+
+A basic modal with a trigger:
+
+```html
+<div class="smartmodal" id="triggerID">I'm a normal modal!</div>
+<a href="#" class="triggerID">Click me</a>
+```
+
+A modal that only get's shown once:
+
+```html
+<div class="smartmodal once" id="triggerID" data-expires="7">I'll only get shown once!</div>
+<a href="#" class="triggerID">Click me</a>
+```
+
+A modal that disappears after so many seconds:
+
+```html
+<div class="smartmodal" id="triggerID" data-time="5">I'm a timed modal!</div>
+<a href="#" class="triggerID">Click me</a>
+```
+
+A modal that disappears and shows the number of remaining seconds left:
+
+```html
+<div class="smartmodal" id="triggerID" data-time="10">I'm a timed modal <span class="sec"></span> seconds before I close!</div>
+<a href="#" class="triggerID">Click me</a>
+```
+
+A modal that automatically pops up after the page loads:
+
+```html
+<div class="smartmodal auto">I'm automatic after page load!</div>
+```
+
+A modal that automatically pops up after a specified number of seconds:
+
+```html
+<div class="smartmodal auto" data-wait="10">I'm automatic after 10 seconds!</div>
+```
+
+A modal that can't be closed:
+
+```html
+<div class="smartmodal sticky auto">I can't be closed!</div>
+```
+
 ## Configuration
 
-The *jQuery smartModal* allows for additional configuration options to allow for more flexibility and control over the models.
+*smartModal* allows for additional configuration options to allow for more flexibility and control over the modals.
 
 ### Modal Class Attribute Options
 
@@ -52,7 +100,7 @@ The *jQuery smartModal* allows for additional configuration options to allow for
 | `data-time` | *Integer.* Specify the number of seconds the modal should be visible. |
 | `data-wait` | *Integer.* Specify the number of seconds before the modal should popup. Should be used with the `auto` class. |
 
-### Additional Options
+### Additional Modal Options
 
 #### Show number of seconds remaining
 
