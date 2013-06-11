@@ -32,7 +32,7 @@ To get started, create your modal box by adding the class, `smartmodal` to it. Y
 
 Now when a user clicks on an element with the `triggerID` class, the modal will popup.
 
-### Examples
+## Examples
 
 A basic modal with a trigger:
 
@@ -80,7 +80,7 @@ A modal that can't be closed:
 <div class="smartmodal sticky auto">I can't be closed!</div>
 ```
 
-## Configuration
+## Configuration Options
 
 *smartModal* allows for additional configuration options to allow for more flexibility and control over the modals.
 
