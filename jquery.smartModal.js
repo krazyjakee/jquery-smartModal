@@ -25,7 +25,8 @@
       numModals = 0;
       
   var timeouts = [],
-      intervals = [];
+      intervals = [],
+      modalIDs = [];
       
   // Build the modal overlay.
   var overlay = $('<div />').addClass('smartmodal-overlay').attr('id', 'smartmodal-overlay').css('display', 'none');
@@ -87,10 +88,30 @@
       
       // Check if a timed modal
       if (modal.data('time')) {
-        // Set a timeout
-        timeouts[id] = window.setTimeout(function() {
-          methods.closeModal(id);
-        }, (modal.data('time') * 1000));
+        // Check if autoclose has been disabled
+        var autoclose = true;
+        if (modal.data('close') && modal.data('close') == 'manual') {
+          autoclose = false;
+          $('.close', modal).hide();
+        }
+        
+        if (autoclose) {
+          // Set a timeout
+          timeouts[id] = window.setTimeout(function() {
+            // Check if a sticky modal
+            var isSticky = false;
+            if (modal.hasClass('sticky')) {
+              modal.removeClass('sticky');
+              isSticky = true;
+            }
+            methods.closeModal(id);
+            
+            // If sticky, make it sticky again
+            if (isSticky) {
+              modal.addClass('sticky');
+            }
+          }, (modal.data('time') * 1000));
+        }
         
         // Check if seconds should be displayed in the modal
         if ($('.sec', modal).length) {
@@ -103,6 +124,14 @@
             if(sec >= 0) {
               $('.sec', modal).text(sec);
             } else {
+              // Check if autoclose has been disabled, if so show the close trigger
+              if (!autoclose && $('.close', modal).is(':hidden')) {
+                // Check if timed sticky, if so make it unsticky
+                if (modal.hasClass('sticky') && modal.data('time')) {
+                  modal.removeClass('sticky').addClass('wasSticky');
+                }
+                $('.close', modal).show();
+              }
               window.clearInterval(intervals[id]);
             }
           }, 1000);
@@ -136,8 +165,15 @@
     'closeModal': function(id) {
       // Check to make sure the modal exists
       if ($('#' + id).length) {
+        var modal = $('#' + id);
+        
         // Check if it's a sticky modal
-        if (!$('#' + id).hasClass('sticky')) {
+        if (!modal.hasClass('sticky')) {
+          // Check if modal was a sticky, if so, make it sticky again
+          if (modal.hasClass('wasSticky')) {
+            modal.removeClass('wasSticky').addClass('sticky');
+          }
+          
           // Check if a interval for the modal has been set
           if (intervals[id]) {
             window.clearInterval(intervals[id]);
@@ -148,7 +184,7 @@
             window.clearTimeout(timeouts[id]);
           }
           
-          $('#'+id).fadeOut(settings.hideDelay, function() {
+          modal.fadeOut(settings.hideDelay, function() {
             // Make sure no other modals are active before removing the overlay
             if(!$('.smartmodal-modal:visible').length) {
               methods.removeOverlay();
@@ -232,6 +268,12 @@
       });
     }
     
+    // Listen when the close trigger is clicked
+    $('.smartmodal .close').bind("click", function(e) {
+      var id = $(this).parent('.smartmodal').attr('id');
+      methods.closeModal(id);
+    });
+    
     // Listen for window resize
     $(window).resize(function(e) {
       methods.positionModal();
@@ -267,6 +309,14 @@
       }
       
       var id = modal.attr('id'); // Get the modal id
+      
+      // Check if duplicate IDs exist
+      if ($.inArray(id, modalIDs) > -1) {
+        if (settings.debug) {
+          console.log('smartModal Error: Multiple #' + id + ' IDs');
+        }
+      }
+      modalIDs.push(id);
       
       // Check if modal should appear automagically
       if (modal.hasClass('once')) {
