@@ -139,12 +139,25 @@ You can display the number of remaining seconds until the modal disappears withi
 <div class="smartmodal" data-time="10">I'm a timed modal <span class="sec"></span> seconds before I close!</div>
 ```
 
+## API Methods
+
+To make it easy to call jQuery.smartModal's methods, you can use it's API:
+
+```javascript
+$.smartModal('show', 'modalID'); // Shows a modal
+$.smartModal('hide', 'modalID'); // Hides a modal
+$.smartModal('settings', settingsObj); // Define smartModal's default settings
+$.smartModal('init', settingsObj); // Initialize the smartModal plugin
+```
+
 ## Cross-Browser Compatibility
 
 This plugin has been tested in the following browsers:
 
 * Google Chome
  * Version 27.0.1453.110
+* Firefox
+ * Version 21.0
 * Safari
  * Version 6.0.2
 
@@ -153,6 +166,12 @@ This plugin has been tested in the following browsers:
 
 * Source hosted at [GitHub](https://github.com/bmarshall511/jquery-smartModal)
 * Report issues, questions, feature requests on [GitHub Issues](https://github.com/bmarshall511/jquery-smartModal/issues)
+
+### Changelog
+
+#### Version 1.1.1
+
+* Added API methods
 
 ## Authors
 

@@ -11,155 +11,27 @@
  */
 
 ;(function($) {
-  $.smartModal = function(options) {
-    var settings = $.extend({
-      overlayDelay: 300,
-      hideDelay: 300,
-      cookieExpires: 365,
-      debug: false,
-      shortkeys: true,
-      clickClose: true
-    }, options);
-    
-    var storageEnabled = false,
-        cookiesEnabled = false,
-        numModals = 0;
-    
-    // Create the modal overlay.
-    var overlay = $('<div />').addClass('smartmodal-overlay').attr('id', 'smartmodal-overlay').css('display', 'none');
-    
-    var methods = {
-      // Show the modal
-      'showModal': function(id) {
-        var modal = $('#'+id);
-        
-        // Style and position the modal
-        modal.addClass('smartmodal-modal');
-        methods.positionModal(id);
-        
-        // Check if the overlay is already on the page
-        if (!$('#smartmodal-overlay').length) {
-          $('body').append(overlay);
-        }
-        
-        // Display the modal
-        overlay.fadeIn(settings.overlayDelay);
-        modal.fadeIn(settings.overlayDelay);
-        
-        // Check if a timed modal
-        if (modal.data('time')) {
-          // Set a timeout
-          setTimeout(function() {
-            methods.closeModal(id);
-          }, (modal.data('time') * 1000));
-          
-          // Check if seconds should be displayed in the modal
-          if ($('.sec', modal).length) {
-            // Show the starting time
-            $('.sec', modal).text(modal.data('time'));
-            
-            // Set an interval for the countdown
-            var interval = setInterval(function() {
-              var sec = parseInt($('.sec', modal).text()) - 1;
-              if(sec >= 0) {
-                $('.sec', modal).text(sec);
-              } else {
-                window.clearInterval(interval);
-              }
-            }, 1000);
-          }
-        }
-        
-        // Check if the modal should only be shown once
-        if (modal.hasClass('once')) {
-          // Use web storage if supported
-          if (storageEnabled) {
-            localStorage['smartModal-' + id] = 'shown';
-          } else if (cookiesEnabled) {
-            var expires = settings.cookieExpires; // set the default time until a cookie expires
-            
-            // Check if modal has specified cookie expire limit
-            if (modal.data('expires')) {
-              expires = modal.data('expires');
-            }
-            
-            // Set the cookie.
-            $.cookie('smartModal-'+id, 'shown', { 'path' : '/', 'expires' : expires });
-          }
-          
-          // Unbind the modal trigger if one is on the page
-          if ($('.' + id).length) {
-            $('.' + id).unbind('click');
-          }
-        }
-      },
-      // Close a modal
-      'closeModal': function(id) {
-        // Check to make sure the modal exists
-        if ($('#' + id).length) {
-          // Check if it's a sticky modal
-          if (!$('#' + id).hasClass('sticky')) {
-            $('#'+id).fadeOut(settings.hideDelay, function() {
-              // Make sure no other modals are active before removing the overlay
-              if(!$('.smartmodal-modal:visible').length) {
-                methods.removeOverlay();
-              }
-            });
-          }
-        }
-      },
-      // Remove the modal overlay
-      'removeOverlay': function() {
-        if($('#smartmodal-overlay').length) {
-          $('#smartmodal-overlay').fadeOut(settings.hideDelay, function() {
-            $(this).remove();
-          });
-        }
-      },
-      // Position the modal
-      'positionModal': function(id) {
-        if(id) {
-          // Check to make sure the modal exists
-          if ($('#' + id).length) {
-            // Get the window's dimisions
-            var width = $(window).width(),
-                height = $(window).height();
-              
-            // Get the modal
-            var modal = $('#' + id);
-            
-            // Get the modal's dimisions
-            var mwidth = modal.width(),
-                mheight = modal.height();
-            
-            // Adjust the modal's position
-            modal.css({
-              'top': (height - mheight) / 2,
-              'left': (width - mwidth) / 2
-            });
-          }
-        } else {
-          $.each($('.smartmodal-modal'), function() {
-            // Get the window's dimisions
-            var width = $(window).width(),
-                height = $(window).height();
-            
-            // Get the modal's dimisions
-            var mwidth = $(this).width(),
-                mheight = $(this).height();
-            
-            // Adjust the modal's position
-            $(this).css({
-              'top': (height - mheight) / 2,
-              'left': (width - mwidth) / 2
-            });
-          });
-        }
-      }
-    }
-    
+  var settings = {
+    overlayDelay: 300,
+    hideDelay: 300,
+    cookieExpires: 365,
+    debug: false,
+    shortkeys: true,
+    clickClose: true
+  };
+  
+  var storageEnabled = false,
+      cookiesEnabled = false,
+      numModals = 0;
+      
+  var intervals = [];
+      
+  // Build the modal overlay.
+  var overlay = $('<div />').addClass('smartmodal-overlay').attr('id', 'smartmodal-overlay').css('display', 'none');
+  
+  var methods = {
     // Initialize the plugin
-    function init() {
+    'init': function() {
       // Check is web storage is supported
       if (typeof(Storage) !== "undefined") {
         storageEnabled = true;
@@ -183,52 +55,197 @@
       
       // Listen for events
       eventHandler();
-    }
-    
-    // Counts the number of modals on the page
-    function countModals() {
-      numModals = $('.smartmodal').length;
-      if (settings.debug) {
-        console.log('smartModal Notice: ' + numModals + ' smartModals found on the page.');
+      
+      // Setup the modals
+      setupModals();
+    },
+    // Show the modal
+    'showModal': function(id) {
+      var modal = $('#'+id);
+      
+      // Check to ensure the modal exists
+      if (!modal.length) {
+        if (settings.debug) {
+          console.log('smartModal Error: Modal (#' + id + ') not found.');
+        }
+        return false;
       }
-    }
-    
-    function eventHandler() {
-      // Check if shortkeys are enabled
-      if (settings.shortkeys) {
-        // Listen for ESC key.
-        $(document).keyup(function(e) {
-          if (e.keyCode == 27) { // esc
-            $.each($('.smartmodal-modal'), function() {
-              if (!$(this).hasClass('sticky')) {
-                var id = $(this).attr('id');
-                methods.closeModal(id);
-              }
-            });
+      
+      // Style and position the modal
+      modal.addClass('smartmodal-modal');
+      methods.positionModal(id);
+      
+      // Check if the overlay is already on the page
+      if (!$('#smartmodal-overlay').length) {
+        $('body').append(overlay);
+      }
+      
+      // Display the modal
+      overlay.fadeIn(settings.overlayDelay);
+      modal.fadeIn(settings.overlayDelay);
+      
+      // Check if a timed modal
+      if (modal.data('time')) {
+        // Set a timeout
+        setTimeout(function() {
+          methods.closeModal(id);
+        }, (modal.data('time') * 1000));
+        
+        // Check if seconds should be displayed in the modal
+        if ($('.sec', modal).length) {
+          // Show the starting time
+          $('.sec', modal).text(modal.data('time'));
+          
+          // Set an interval for the countdown
+          intervals[id] = window.setInterval(function() {
+            var sec = parseInt($('.sec', modal).text()) - 1;
+            if(sec >= 0) {
+              $('.sec', modal).text(sec);
+            } else {
+              window.clearInterval(intervals[id]);
+            }
+          }, 1000);
+        }
+      }
+      
+      // Check if the modal should only be shown once
+      if (modal.hasClass('once')) {
+        // Use web storage if supported
+        if (storageEnabled) {
+          localStorage['smartModal-' + id] = 'shown';
+        } else if (cookiesEnabled) {
+          var expires = settings.cookieExpires; // set the default time until a cookie expires
+          
+          // Check if modal has specified cookie expire limit
+          if (modal.data('expires')) {
+            expires = modal.data('expires');
           }
+          
+          // Set the cookie.
+          $.cookie('smartModal-'+id, 'shown', { 'path' : '/', 'expires' : expires });
+        }
+        
+        // Unbind the modal trigger if one is on the page
+        if ($('.' + id).length) {
+          $('.' + id).unbind('click');
+        }
+      }
+    },
+    // Close a modal
+    'closeModal': function(id) {
+      // Check to make sure the modal exists
+      if ($('#' + id).length) {
+        // Check if it's a sticky modal
+        if (!$('#' + id).hasClass('sticky')) {
+          // Check if interval for the modal has been set
+          if (intervals[id]) {
+            window.clearInterval(intervals[id]);
+          }
+          
+          $('#'+id).fadeOut(settings.hideDelay, function() {
+            // Make sure no other modals are active before removing the overlay
+            if(!$('.smartmodal-modal:visible').length) {
+              methods.removeOverlay();
+            }
+          });
+        }
+      }
+    },
+    // Remove the modal overlay
+    'removeOverlay': function() {
+      if($('#smartmodal-overlay').length) {
+        $('#smartmodal-overlay').fadeOut(settings.hideDelay, function() {
+          $(this).remove();
         });
       }
-      
-      // Listen for window resize.
-      $(window).resize(function(e) {
-        methods.positionModal();
-      });
-      
-      // Check if clicking on the overlay to close is enabled
-      if (settings.clickClose) {
-        $('body').delegate("#smartmodal-overlay", "click", function(e) {
-          e.preventDefault();
-          $.each($('.smartmodal-modal'), function() {
-            methods.closeModal($(this).attr('id'));
+    },
+    // Position the modal
+    'positionModal': function(id) {
+      if(id) {
+        // Check to make sure the modal exists
+        if ($('#' + id).length) {
+          // Get the window's dimisions
+          var width = $(window).width(),
+              height = $(window).height();
+            
+          // Get the modal
+          var modal = $('#' + id);
+          
+          // Get the modal's dimisions
+          var mwidth = modal.width(),
+              mheight = modal.height();
+          
+          // Adjust the modal's position
+          modal.css({
+            'top': (height - mheight) / 2,
+            'left': (width - mwidth) / 2
+          });
+        }
+      } else {
+        $.each($('.smartmodal-modal'), function() {
+          // Get the window's dimisions
+          var width = $(window).width(),
+              height = $(window).height();
+          
+          // Get the modal's dimisions
+          var mwidth = $(this).width(),
+              mheight = $(this).height();
+          
+          // Adjust the modal's position
+          $(this).css({
+            'top': (height - mheight) / 2,
+            'left': (width - mwidth) / 2
           });
         });
       }
     }
+  }
+  
+  // Counts the number of modals on the page
+  function countModals() {
+    numModals = $('.smartmodal').length;
+    if (settings.debug) {
+      console.log('smartModal Notice: ' + numModals + ' smartModals found on the page.');
+    }
+  }
+  
+  function eventHandler() {
+    // Check if shortkeys are enabled
+    if (settings.shortkeys) {
+      // Listen for ESC key.
+      $(document).keyup(function(e) {
+        if (e.keyCode == 27) { // esc
+          $.each($('.smartmodal-modal'), function() {
+            if (!$(this).hasClass('sticky')) {
+              var id = $(this).attr('id');
+              
+              methods.closeModal(id);
+            }
+          });
+        }
+      });
+    }
     
-    init();
+    // Listen for window resize
+    $(window).resize(function(e) {
+      methods.positionModal();
+    });
     
+    // Check if clicking on the overlay to close is enabled
+    if (settings.clickClose) {
+      $('body').delegate("#smartmodal-overlay", "click", function(e) {
+        e.preventDefault();
+        $.each($('.smartmodal-modal'), function() {
+          methods.closeModal($(this).attr('id'));
+        });
+      });
+    }
+  }
+  
+  // Setup the modals
+  function setupModals() {
     // Find and initialize all modals
-    return $('.smartmodal').each(function() {
+    $('.smartmodal').each(function() {
       var modal = $(this); // Get the modal
       
       // Check to ensure each modal has an ID, if not, assign one
@@ -295,5 +312,47 @@
         }
       }
     });
+  }
+  
+  $.smartModal = function(options, id) {
+    if (typeof options == 'object') {
+      settings = $.extend(settings, options);
+      methods.init();
+    } else if (typeof options == 'string' && typeof id == 'string') {
+      switch (options) {
+        case 'show':
+          methods.showModal(id);
+        break;
+        case 'hide':
+          methods.closeModal(id);
+        break;
+        default:
+          if (settings.debug) {
+            console.log('smartModal Error: ' + options + 'is not an available method.');
+          }
+        break;
+      }
+    } else if (typeof options == 'string' && typeof id == 'object') {
+      switch (options) {
+        case 'init':
+        if (id) {
+          settings = $.extend(settings, id);
+        }
+        methods.init();
+        break;
+        case 'settings':
+          settings = $.extend(settings, id);
+        break;
+        default:
+          if (settings.debug) {
+            console.log('smartModal Error: ' + options + 'is not an available method.');
+          }
+        break;
+      }
+    } else {
+      if (settings.debug) {
+        console.log('smartModal Error: Couldn\'t initialize.');
+      }
+    }
   }
 }(jQuery));
