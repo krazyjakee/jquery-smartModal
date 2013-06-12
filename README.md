@@ -1,7 +1,7 @@
 jQuery.smartModal
 =================
 
-A simple, lightweight jQuery modal plugin that's highly configurable, easy-to-use &amp; implement. Includes multiple implementation options like timed, automatic, sticky modals and more!
+A simple, lightweight jQuery modal plugin that's highly configurable, easy-to-use &amp; implement. Includes multiple implementation options like timed, automatic, sticky modals and more! It has the ability to show modals only once per user using HTML5 web storage or [jQuery.cookie](https://github.com/carhartl/jquery-cookie) as a fallback.
 
 ## Installation
 
@@ -109,6 +109,8 @@ $.smartModal({
 | `hideDelay` | *Integer.* Number of milliseconds it takes for the modal to fade out. |
 | `cookieExpires` | *Integer.* Number of days until the modal cookies expire. |
 | `debug` | *Boolean.* Enable/disbale debug mode. |
+| `shortkeys` | *Boolean.* Enable/disbale shortcut keys. |
+| `clickClose` | *Boolean.* Enable/disbale the ability to close the modals by clicking on the overlay. |
 
 
 ### Modal Class Attribute Options
@@ -143,6 +145,8 @@ This plugin has been tested in the following browsers:
 
 * Google Chome
  * Version 27.0.1453.110
+* Safari
+ * Version 6.0.2
 
 
 ## Development

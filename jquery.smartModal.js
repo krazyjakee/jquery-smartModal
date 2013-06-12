@@ -16,7 +16,9 @@
       overlayDelay: 300,
       hideDelay: 300,
       cookieExpires: 365,
-      debug: false
+      debug: false,
+      shortkeys: true,
+      clickClose: true
     }, options);
     
     var storageEnabled = false,
@@ -94,13 +96,16 @@
       // Close a modal
       'closeModal': function(id) {
         // Check to make sure the modal exists
-        if ($('#'+id).length) {
-          $('#'+id).fadeOut(settings.hideDelay, function() {
-            // Make sure no other modals are active before removing the overlay
-            if(!$('.smartmodal-modal:visible').length) {
-              methods.removeOverlay();
-            }
-          });
+        if ($('#' + id).length) {
+          // Check if it's a sticky modal
+          if (!$('#' + id).hasClass('sticky')) {
+            $('#'+id).fadeOut(settings.hideDelay, function() {
+              // Make sure no other modals are active before removing the overlay
+              if(!$('.smartmodal-modal:visible').length) {
+                methods.removeOverlay();
+              }
+            });
+          }
         }
       },
       // Remove the modal overlay
@@ -113,27 +118,45 @@
       },
       // Position the modal
       'positionModal': function(id) {
-        // Check to make sure the modal exists
-        if ($('#' + id).length) {
-          // Get the window's dimisions
-          var width = $(window).width(),
-              height = $(window).height();
+        if(id) {
+          // Check to make sure the modal exists
+          if ($('#' + id).length) {
+            // Get the window's dimisions
+            var width = $(window).width(),
+                height = $(window).height();
+              
+            // Get the modal
+            var modal = $('#' + id);
             
-          // Get the modal
-          var modal = $('#' + id);
-          
-          // Get the modal's dimisions
-          var mwidth = modal.width(),
-              mheight = modal.height();
-          
-          // Adjust the modal's position
-          modal.css({
-            'top': (height - mheight) / 2,
-            'left': (width - mwidth) / 2
+            // Get the modal's dimisions
+            var mwidth = modal.width(),
+                mheight = modal.height();
+            
+            // Adjust the modal's position
+            modal.css({
+              'top': (height - mheight) / 2,
+              'left': (width - mwidth) / 2
+            });
+          }
+        } else {
+          $.each($('.smartmodal-modal'), function() {
+            // Get the window's dimisions
+            var width = $(window).width(),
+                height = $(window).height();
+            
+            // Get the modal's dimisions
+            var mwidth = $(this).width(),
+                mheight = $(this).height();
+            
+            // Adjust the modal's position
+            $(this).css({
+              'top': (height - mheight) / 2,
+              'left': (width - mwidth) / 2
+            });
           });
         }
       }
-    };
+    }
     
     // Initialize the plugin
     function init() {
@@ -171,22 +194,35 @@
     }
     
     function eventHandler() {
-      // Listen for ESC key.
-      $(document).keyup(function(e) {
-        if (e.keyCode == 27) { // esc
-          $.each($('.smartmodal-modal'), function() {
-            if(!$(this).hasClass('sticky')) {
-              var id = $(this).attr('id');
-              methods.closeModal(id);
-            }
-          });
-        }
-      });
+      // Check if shortkeys are enabled
+      if (settings.shortkeys) {
+        // Listen for ESC key.
+        $(document).keyup(function(e) {
+          if (e.keyCode == 27) { // esc
+            $.each($('.smartmodal-modal'), function() {
+              if (!$(this).hasClass('sticky')) {
+                var id = $(this).attr('id');
+                methods.closeModal(id);
+              }
+            });
+          }
+        });
+      }
       
       // Listen for window resize.
       $(window).resize(function(e) {
-        methods.positionModals();
+        methods.positionModal();
       });
+      
+      // Check if clicking on the overlay to close is enabled
+      if (settings.clickClose) {
+        $('body').delegate("#smartmodal-overlay", "click", function(e) {
+          e.preventDefault();
+          $.each($('.smartmodal-modal'), function() {
+            methods.closeModal($(this).attr('id'));
+          });
+        });
+      }
     }
     
     init();
