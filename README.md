@@ -5,10 +5,15 @@ A simple, lightweight jQuery modal plugin that's highly configurable, easy-to-us
 
 ## Installation
 
-Include the `jquery.smartModal.js` script *after* the jQuery library (unless you are packaging scripts somehow else):
+Include the `jquery.smartModal.js` script *after* the jQuery library (unless you are packaging scripts somehow else) then initialize the plugin:
 
 ```html
 <script src='jquery.smartModal.js'></script>
+<script>
+$(function() {
+  $.smartModal();
+});
+</script>
 ```
 
 **Do not include the script directly from GitHub**. The file is being served as text/plain and as such being blocked in Internet Explorer on Windows 7 for instance (because of the wrong MIME type). Bottom line: GitHub is not a CDN.
@@ -84,6 +89,28 @@ A modal that can't be closed:
 
 *smartModal* allows for additional configuration options to allow for more flexibility and control over the modals.
 
+### Initialization Options
+
+You can set some default options for your modals with initializating the plugin like so:
+
+```javascript
+$.smartModal({
+  overlayDelay: 300,
+  hideDelay: 300,
+  cookieExpires: 7
+});
+```
+
+#### Available Initialization Options
+
+| Option | Description |
+| --- | --- |
+| `overlayDelay` | *Integer.* Number of milliseconds it takes for the modal to fade in. |
+| `hideDelay` | *Integer.* Number of milliseconds it takes for the modal to fade out. |
+| `cookieExpires` | *Integer.* Number of days until the modal cookies expire. |
+| `debug` | *Boolean.* Enable/disbale debug mode. |
+
+
 ### Modal Class Attribute Options
 
 | Class | Description |
@@ -109,6 +136,14 @@ You can display the number of remaining seconds until the modal disappears withi
 ```html
 <div class="smartmodal" data-time="10">I'm a timed modal <span class="sec"></span> seconds before I close!</div>
 ```
+
+## Cross-Browser Compatibility
+
+This plugin has been tested in the following browsers:
+
+* Google Chome
+ * Version 27.0.1453.110
+
 
 ## Development
 
