@@ -24,7 +24,8 @@
       cookiesEnabled = false,
       numModals = 0;
       
-  var intervals = [];
+  var timeouts = [],
+      intervals = [];
       
   // Build the modal overlay.
   var overlay = $('<div />').addClass('smartmodal-overlay').attr('id', 'smartmodal-overlay').css('display', 'none');
@@ -87,7 +88,7 @@
       // Check if a timed modal
       if (modal.data('time')) {
         // Set a timeout
-        setTimeout(function() {
+        timeouts[id] = window.setTimeout(function() {
           methods.closeModal(id);
         }, (modal.data('time') * 1000));
         
@@ -137,9 +138,14 @@
       if ($('#' + id).length) {
         // Check if it's a sticky modal
         if (!$('#' + id).hasClass('sticky')) {
-          // Check if interval for the modal has been set
+          // Check if a interval for the modal has been set
           if (intervals[id]) {
             window.clearInterval(intervals[id]);
+          }
+          
+          // Check if a timeout for the modal has been set
+          if (timeouts[id]) {
+            window.clearTimeout(timeouts[id]);
           }
           
           $('#'+id).fadeOut(settings.hideDelay, function() {
