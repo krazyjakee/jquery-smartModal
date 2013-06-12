@@ -198,7 +198,7 @@ This plugin has been tested in the following browsers:
 
 ### Changelog
 
-#### Version 1.1.1
+#### Version 1.1.0
 
 * Added API methods
 * Fixed issue with timeouts and intervals
