@@ -19,13 +19,14 @@
     hideDelay: 300,
     cookieExpires: 365,
     debug: false,
-    shortkeys: true,
     clickClose: true,
     animationDuration: 800,
-    animationEasing: 'linear'
+    animationEasing: 'linear',
+    gaTracking: false
   },
     storageEnabled = false,
     cookiesEnabled = false,
+    gaEnabled = false,
     numModals = 0,
     timeouts = [],
     intervals = [],
@@ -34,12 +35,23 @@
     methods = {
       // Initialize the plugin
       'init': function() {
-        // Check is web storage is supported
+        // Check if GA is enabled
+        if (settings.gaTracking) {
+          if (_gaq) {
+            gaEnabled = true;
+          } else {
+            if (settings.debug) {
+              console.log('GA not loaded. Tracking disabled.');
+            }
+          }
+        }
+
+        // Check if web storage is supported
         if (window.localStorage) {
           storageEnabled = true;
         } else {
           if (settings.debug) {
-            console.log('smartModal Notice: Web storage is not supported. Using the jQuery.cookie plugin instead.');
+            console.log('Web storage not supported. Using jQuery.cookie plugin.');
           }
         }
 
@@ -48,18 +60,18 @@
           cookiesEnabled = true;
         } else {
           if (settings.debug) {
-            console.log('smartModal Notice: The jQuery.cookie plugin could not be loaded. smartModal cookie functionality has been disabled.');
+            console.log('jQuery.cookie plugin not loaded. Cookies have been disabled.');
           }
         }
 
         // Set the number of modals that appear on the page
         methods.countModals();
 
-        // Listen for events
-        methods.eventHandler();
-
         // Setup the modals
         methods.setupModals();
+
+        // Listen for events
+        methods.eventHandler();
       },
       // Show the modal
       'showModal': function(id) {
@@ -75,7 +87,7 @@
         // Check to ensure the modal exists
         if (!modal.length) {
           if (settings.debug) {
-            console.log('smartModal Error: Modal (#' + id + ') not found.');
+            console.log('#' + id + ' not found.');
           }
           return false;
         }
@@ -297,18 +309,13 @@
           return (width - mwidth) / 2;
         case 'top':
           return (height - mheight) / 2;
-        default:
-          if (settings.debug) {
-            console.log('smartModal Notice: ' + pos + ' not a valid position option.');
-          }
-          break;
         }
       },
       // // Counts the number of modals on the page
       'countModals': function() {
         numModals = $('.smartmodal').length;
         if (settings.debug) {
-          console.log('smartModal Notice: ' + numModals + ' smartModals found on the page.');
+          console.log(numModals + ' modals found.');
         }
       },
       'eventHandler': function() {
@@ -364,7 +371,7 @@
           // Check to ensure each modal has an ID, if not, assign one
           if (!modal.attr('id')) {
             while (c) {
-              i = 'smartModal-' + Math.floor((Math.random() * numModals) + 1);
+              i = 'SM-' + Math.floor((Math.random() * numModals) + 1);
               if (!$('#' + i).length) {
                 modal.attr('id', i);
                 c = false;
@@ -377,7 +384,7 @@
           // Check if duplicate IDs exist
           if ($.inArray(id, modalIDs) > -1) {
             if (settings.debug) {
-              console.log('smartModal Error: Multiple #' + id + ' IDs');
+              console.log(' Multiple #' + id);
             }
           }
           modalIDs.push(id);
@@ -432,6 +439,14 @@
             }
           }
         });
+      },
+      // Google Analytics event tracking (https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide)
+      'gaTrackEvent': function(category, action, label, value) {
+        if (gaEnabled) {
+          _gaq.push([
+            '_trackEvent', category, action, label, value
+          ]);
+        }
       }
     };
 
@@ -449,7 +464,7 @@
         break;
       default:
         if (settings.debug) {
-          console.log('smartModal Error: ' + options + 'is not an available method.');
+          console.log(options + 'not valid.');
         }
         break;
       }
@@ -466,13 +481,13 @@
         break;
       default:
         if (settings.debug) {
-          console.log('smartModal Error: ' + options + 'is not an available method.');
+          console.log(options + ' not valid.');
         }
         break;
       }
     } else {
       if (settings.debug) {
-        console.log('smartModal Error: Couldn\'t initialize.');
+        console.log('Couldn\'t initialize.');
       }
     }
   };

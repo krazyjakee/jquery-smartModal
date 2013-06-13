@@ -137,6 +137,7 @@ $.smartModal({
 | `clickClose` | *Boolean.* Enable/disbale the ability to close the modals by clicking on the overlay. |
 | `animationDuration` | *Integer.* Default number of milliseconds for the animation duration. |
 | `animationEasing` | *String.* The default easing effect for the modal animation. See http://easings.net/ |
+| `gaTracking` | *Boolean.* Enable/disable Google Analytics event tracking. *In Development* |
 
 
 ### Modal Class Attribute Options
@@ -213,6 +214,7 @@ This plugin has been tested in the following browsers:
 * Added the ability for modal animations
 * Added minified version of the script
 * Cleaned-up JS with JSlint.com
+* Started on integrating Google Analytics event tracking
 
 #### Version 1.1.0
 
