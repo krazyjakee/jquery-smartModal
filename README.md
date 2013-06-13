@@ -212,6 +212,7 @@ This plugin has been tested in the following browsers:
 * Fixed issue with close trigger
 * Added the ability for modal animations
 * Added minified version of the script
+* Cleaned-up JS with JSlint.com
 
 #### Version 1.1.0
 
