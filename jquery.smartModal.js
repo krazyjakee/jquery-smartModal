@@ -1,7 +1,7 @@
 /*!
  * jQuery smartModal
  * 
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Ben Marshall
  * Author URL: http://www.benmarshall.me
  * jQuery Plugin URL: http://plugins.jquery.com/smartModal/
@@ -453,7 +453,6 @@
   $.smartModal = function(options, id) {
     if (typeof options === 'object') {
       settings = $.extend(settings, options);
-      methods.init();
     } else if (typeof options === 'string' && typeof id === 'string') {
       switch (options) {
       case 'show':
@@ -486,9 +485,7 @@
         break;
       }
     } else {
-      if (settings.debug) {
-        console.log('Couldn\'t initialize.');
-      }
+      methods.init();
     }
   };
 }(jQuery));
