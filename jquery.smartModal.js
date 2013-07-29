@@ -138,6 +138,11 @@
         } else {
           modal.fadeIn(settings.overlayDelay);
         }
+        
+        // Send event to Google Analytics if set
+        if (gaEnabled && modal.data('name')) {
+          methods.gaTrackEvent('Modal: ' + modal.data('name'), 'Opened');
+        }
 
         // Check if a timed modal
         if (modal.data('time')) {
@@ -240,6 +245,11 @@
                 methods.removeOverlay();
               }
             });
+            
+            // Send event to Google Analytics if set
+            if (gaEnabled && modal.data('name')) {
+              methods.gaTrackEvent('Modal: ' + modal.data('name'), 'Closed');
+            }
           }
         }
       },
