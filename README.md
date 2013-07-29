@@ -211,6 +211,7 @@ This plugin has been tested in the following browsers:
 #### Version 1.1.2
 
 * Fixed issue where the modal wouldn't initialize when no settings are defined
+* Fixed problem when trying to detect if Google Analytics tracking script has been loaded
 
 #### Version 1.1.1
 
