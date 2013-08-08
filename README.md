@@ -209,6 +209,10 @@ This plugin has been tested in the following browsers:
 
 ### Changelog
 
+#### Version 2.0.0
+
+* Fixed issue the modal woudn't initialize the settings object is defined
+
 #### Version 1.1.2
 
 * Fixed issue where the modal wouldn't initialize when no settings are defined
