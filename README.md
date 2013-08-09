@@ -156,7 +156,7 @@ $.smartModal({
 | `data-time` | *Integer.* Specify the number of seconds the modal should be visible. |
 | `data-wait` | *Integer* Specify the number of seconds before the modal should popup. Should be used with the `auto` class. |
 | `data-close` | *String (manual).* Disables the modal from closing automatically. Used in conjunction with `data-time` and the `sticky` class. |
-| `data-animation` | *String (`start|effect|duration`).* Specifies the modals animation settings. |
+| `data-animation` | *String (start | effect | duration).* Specifies the modals animation settings. |
 | `data-name` | *String.* The name of the modal. Used for GA event tracking. |
 
 ### Additional Modal Options
