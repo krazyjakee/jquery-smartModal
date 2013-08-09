@@ -23,7 +23,8 @@
     clickClose: true,
     animationDuration: 800,
     animationEasing: 'linear',
-    gaTracking: false
+    gaTracking: false,
+    shortkeys: true
   },
     storageEnabled = false,
     cookiesEnabled = false,
