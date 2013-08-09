@@ -133,7 +133,7 @@ $.smartModal({
 | `hideDelay` | *Integer.* Number of milliseconds it takes for the modal to fade out. |
 | `cookieExpires` | *Integer.* Number of days until the modal cookies expire. |
 | `debug` | *Boolean.* Enable/disbale debug mode. |
-| `shortkeys` | *Boolean.* Enable/disbale shortcut keys. |
+| `shortkeys` | *Boolean.* Enable/disable shortcut keys. |
 | `clickClose` | *Boolean.* Enable/disbale the ability to close the modals by clicking on the overlay. |
 | `animationDuration` | *Integer.* Default number of milliseconds for the animation duration. |
 | `animationEasing` | *String.* The default easing effect for the modal animation. See http://easings.net/ |
