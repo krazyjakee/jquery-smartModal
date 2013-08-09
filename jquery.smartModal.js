@@ -39,7 +39,7 @@
       'init': function () {
         // Check if GA is enabled
         if (settings.gaTracking) {
-          if (_gaq !== 'undefined') {
+          if (typeof(_gaq) !== 'undefined') {
             gaEnabled = true;
           } else {
             if (settings.debug) {
