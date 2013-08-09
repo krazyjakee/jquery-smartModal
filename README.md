@@ -193,13 +193,14 @@ $.smartModal('init', settingsObj); // Initialize the smartModal plugin
 This plugin has been tested in the following browsers:
 
 * Google Chome
- * Version 27.0.1453.110
+ * Version 28
+ * Version 27
 * Firefox
- * Version 21.0
+ * Version 21
 * Safari
- * Version 6.0.2
+ * Version 6
 * Opera
- * Version 12.15
+ * Version 12
 
 
 ## Development
@@ -212,6 +213,9 @@ This plugin has been tested in the following browsers:
 #### Version 2.0.0
 
 * Fixed issue the modal woudn't initialize the settings object is defined
+* Changed the GA event tracking naming convention structure
+* Fixed JS error when the GA tracking script hasen't be loaded
+* Fixed the missing `shortkey` setting
 
 #### Version 1.1.2
 
