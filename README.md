@@ -214,7 +214,7 @@ This plugin has been tested in the following browsers:
 
 * Fixed issue the modal woudn't initialize the settings object is defined
 * Changed the GA event tracking naming convention structure
-* Fixed JS error when the GA tracking script hasen't be loaded
+* Fixed JS error when the GA tracking script hasn't be loaded
 * Fixed the missing `shortkey` setting
 
 #### Version 1.1.2
