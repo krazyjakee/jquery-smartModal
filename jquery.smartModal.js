@@ -143,7 +143,7 @@
 
         // Send event to Google Analytics if set
         if (gaEnabled && modal.data('name')) {
-          methods.gaTrackEvent('Modal: ' + modal.data('name'), 'Opened');
+          methods.gaTrackEvent('jQuery.smartModal', modal.data('name'), 'Opened');
         }
 
         // Check if a timed modal
@@ -250,7 +250,7 @@
 
             // Send event to Google Analytics if set
             if (gaEnabled && modal.data('name')) {
-              methods.gaTrackEvent('Modal: ' + modal.data('name'), 'Closed');
+              methods.gaTrackEvent('jQuery.smartModal', modal.data('name'), 'Closed');
             }
           }
         }
