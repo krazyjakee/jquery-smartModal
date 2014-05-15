@@ -1,13 +1,13 @@
 /*!
  * jQuery smartModal
- * 
- * Version: 2.1.0
+ *
+ * Version: 2.2.0
  * Author: Ben Marshall
  * Author URL: http://www.benmarshall.me
  * jQuery Plugin URL: http://plugins.jquery.com/smartModal/
  * Plugin URL: http://www.benmarshall.me/jquery-smartmodal/
  * GitHub: https://github.com/bmarshall511/jquery-smartModal
- * 
+ *
  * Licensed under the MIT license
  */
 /*jslint browser: true, devel: true, indent: 2 */
@@ -24,7 +24,13 @@
     animationDuration: 800,
     animationEasing: 'linear',
     gaTracking: false,
-    shortkeys: true
+    shortkeys: true,
+    onOpen: function ( id ) {
+      return id;
+    },
+    onClose: function ( id ) {
+      return id;
+    }
   },
     storageEnabled = false,
     cookiesEnabled = false,
@@ -146,6 +152,15 @@
           methods.gaTrackEvent('jQuery.smartModal', modal.data('name'), 'Opened');
         }
 
+        // Check for onOpen callback
+        if (settings.onOpen) {
+          if ($.isFunction( settings.onOpen )) {
+            settings.onOpen( modal.attr('id') );
+          } else if (settings.debug) {
+            console.log( settings.onOpen + ' is not a valid function for onOpen.' );
+          }
+        }
+
         // Check if a timed modal
         if (modal.data('time')) {
           // Check if autoclose has been disabled
@@ -246,6 +261,15 @@
             // Send event to Google Analytics if set
             if (gaEnabled && modal.data('name')) {
               methods.gaTrackEvent('jQuery.smartModal', modal.data('name'), 'Closed');
+            }
+
+            // Check for onClose callback
+            if (settings.onClose) {
+              if ($.isFunction( settings.onClose )) {
+                settings.onClose( modal.attr('id') );
+              } else if (settings.debug) {
+                console.log( settings.onClose + ' is not a valid function for onClose.' );
+              }
             }
           }
         }

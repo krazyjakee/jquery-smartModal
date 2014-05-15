@@ -3,6 +3,8 @@ jQuery.smartModal
 
 A simple, lightweight jQuery modal plugin that's highly configurable, easy-to-use &amp; implement. Includes multiple implementation options like timed, automatic, sticky modals and more! It has the ability to show modals only once per user using HTML5 web storage or [jQuery.cookie](https://github.com/carhartl/jquery-cookie) as a fallback.
 
+Visit http://www.benmarshall.me/jquery-smartmodal/ for more information.
+
 ## Installation
 
 Include the `jquery.smartModal.js` script *after* the jQuery library (unless you are packaging scripts somehow else) then initialize the plugin:
@@ -140,6 +142,8 @@ $.smartModal({
 | `animationDuration` | *Integer.* Default number of milliseconds for the animation duration. |
 | `animationEasing` | *String.* The default easing effect for the modal animation. See http://easings.net/ |
 | `gaTracking` | *Boolean.* Enable/disable Google Analytics event tracking. |
+| `onOpen` | *Function.* Callback function when the modal is opened. Returns the modal ID. |
+| `onClose` | *Function.* Callback function when the modal is closed. Returns the modal ID. |
 
 
 ### Modal Class Attribute Options
@@ -211,6 +215,9 @@ This plugin has been tested in the following browsers:
 * Report issues, questions, feature requests on [GitHub Issues](https://github.com/bmarshall511/jquery-smartModal/issues)
 
 ### Changelog
+
+#### Version 2.2.0
+* Created callback functions for on open and on close (https://github.com/bmarshall511/jquery-smartModal/issues/19)
 
 #### Version 2.1.0
 * Added the ability to manually trigger a modal that's set to show only once (https://github.com/bmarshall511/jquery-smartModal/issues/15)
