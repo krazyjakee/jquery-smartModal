@@ -196,9 +196,10 @@ $.smartModal('init', settingsObj); // Initialize the smartModal plugin
 
 ## Cross-Browser Compatibility
 
-This plugin has been tested in the following browsers:
+This plugin has been tested in the following browsers (should also work in IE, but haven't tested):
 
 * Google Chome
+ * Version 33
  * Version 28
  * Version 27
 * Firefox
