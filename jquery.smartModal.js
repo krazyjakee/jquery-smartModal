@@ -1,7 +1,7 @@
 /*!
  * jQuery smartModal
  *
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Ben Marshall
  * Author URL: http://www.benmarshall.me
  * jQuery Plugin URL: http://plugins.jquery.com/smartModal/
@@ -35,6 +35,7 @@
     storageEnabled = false,
     cookiesEnabled = false,
     gaEnabled = false,
+    gaVersion = false,
     numModals = 0,
     timeouts = [],
     intervals = [],
@@ -47,10 +48,14 @@
         if (settings.gaTracking) {
           if (typeof(_gaq) !== 'undefined') {
             gaEnabled = true;
-          } else {
-            if (settings.debug) {
-              console.log('GA not loaded. Tracking disabled.');
-            }
+            // Classic Analytics
+            gaVersion = 'c';
+          } else if (typeof(ga) !== 'undefined') {
+            gaEnabled = true;
+            // Universal Analytics
+            gaVersion = 'u';
+          } else if (settings.debug) {
+            console.log('GA not loaded. Tracking disabled.');
           }
         }
 
@@ -470,9 +475,13 @@
       // Google Analytics event tracking (https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide)
       'gaTrackEvent': function (category, action, label, value) {
         if (gaEnabled) {
-          _gaq.push([
-            '_trackEvent', category, action, label, value
-          ]);
+          if (gaVersion === 'c') {
+            _gaq.push([
+              '_trackEvent', category, action, label, value
+            ]);
+          } else if (gaVersion === 'u') {
+            ga('send', 'event', category, action, label, value);
+          }
         }
       }
     };

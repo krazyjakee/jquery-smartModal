@@ -162,7 +162,7 @@ $.smartModal({
 | `data-time` | *Integer.* Specify the number of seconds the modal should be visible. |
 | `data-wait` | *Integer* Specify the number of seconds before the modal should popup. Should be used with the `auto` class. |
 | `data-close` | *String (manual).* Disables the modal from closing automatically. Used in conjunction with `data-time` and the `sticky` class. |
-| `data-animation` | *String (start effect duration).* Specifies the modals animation settings. |
+| `data-animation` | *String (start effect duration).* Specifies the modals animation settings. **Requires jQuery UI Effects component.** |
 | `data-name` | *String.* The name of the modal. Used for GA event tracking. |
 
 ### Additional Modal Options
@@ -199,15 +199,13 @@ $.smartModal('init', settingsObj); // Initialize the smartModal plugin
 This plugin has been tested in the following browsers (should also work in IE, but haven't tested):
 
 * Google Chome
- * Version 33
- * Version 28
- * Version 27
+ * Version 27+
 * Firefox
- * Version 21
+ * Version 21+
 * Safari
- * Version 6
+ * Version 6+
 * Opera
- * Version 12
+ * Version 12+
 
 
 ## Development
@@ -216,6 +214,12 @@ This plugin has been tested in the following browsers (should also work in IE, b
 * Report issues, questions, feature requests on [GitHub Issues](https://github.com/bmarshall511/jquery-smartModal/issues)
 
 ### Changelog
+
+#### Version 2.2.1
+* Updated the jquery.cookie plugin to v1.4.1
+* Added grunt configuration files
+* Updated the jQuery UI plugin to v1.11.0
+* Integrated GA Universal Analytics
 
 #### Version 2.2.0
 * Created callback functions for on open and on close (https://github.com/bmarshall511/jquery-smartModal/issues/19)
