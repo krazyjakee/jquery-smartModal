@@ -1,10 +1,20 @@
 {
   "name": "jquery-smartModal",
-  "version": "2.2.1",
+  "version": "2.3.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bmarshall511/jquery-smartModal"
+  },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-uglify": "^0.5.0",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt": "~0.4.2",
+    "grunt-concurrent": "*",
+    "grunt-contrib-compass": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "load-grunt-config": "*"
+  },
+  "dependencies": {
+    "time-grunt": "*"
   }
 }

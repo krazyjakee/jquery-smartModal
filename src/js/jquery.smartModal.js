@@ -1,7 +1,7 @@
 /*!
  * jQuery smartModal
  *
- * Version: 2.2.1
+ * Version: 2.3.0
  * Author: Ben Marshall
  * Author URL: http://www.benmarshall.me
  * jQuery Plugin URL: http://plugins.jquery.com/smartModal/
@@ -398,7 +398,9 @@
       // Setup the modals
       'setupModals': function () {
         // Find and initialize all modals
-        $('.smartmodal').each(function () {
+        $( ".smartmodal" ).each(function () {
+          console.log($( this ).prop( "tagName" ));
+
           var modal = $(this), // Get the modal
             c = true,
             id,

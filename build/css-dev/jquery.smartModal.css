@@ -1,0 +1,29 @@
+/* line 1, ../../src/scss/jquery.smartModal.scss */
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+/* line 7, ../../src/scss/jquery.smartModal.scss */
+.smartmodal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* line 18, ../../src/scss/jquery.smartModal.scss */
+.smartmodal-modal {
+  display: none;
+  position: fixed;
+  z-index: 999999;
+  padding: 1em;
+  border-radius: .3em;
+  background: #fff;
+  color: #000;
+}

@@ -1,3 +1,4 @@
 module.exports = {
-  all: ['jquery.smartModal.js', 'smartModal.jquery.json']
+  all: ['src/js/**/*.js'],
+  gruntfile: ['Gruntfile.js']
 };

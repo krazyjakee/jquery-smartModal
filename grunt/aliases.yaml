@@ -1,4 +1,9 @@
 default:
   - 'jshint'
   - 'uglify'
-  - 'watch'
+  - 'concurrent:watch'
+
+prod:
+  - 'jshint'
+  - 'uglify'
+  - 'compass:prod'
