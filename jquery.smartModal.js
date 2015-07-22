@@ -389,7 +389,7 @@
         if (settings.clickClose) {
           $('body').delegate("#smartmodal-overlay", "click", function (e) {
             e.preventDefault();
-            $.each($('.smartmodal-modal'), function () {
+            $.each($('.smartmodal-modal:visible'), function () {
               methods.closeModal($(this).attr('id'));
             });
           });
